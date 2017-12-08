@@ -1,7 +1,10 @@
 from .crypto import Ecc
+from .script import pay_to_public_key_hash
+from .miner import createNewBlock
 
 
 def main():
     ecc1 = Ecc()
-    signature = ecc1.sign("this is a Tx1")
-    print(ecc1.verity(signature, "this is a Tx1"))
+
+    script1 = pay_to_public_key_hash(str(ecc1.pub_key))
+    block1 = createNewBlock(script1)

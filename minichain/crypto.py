@@ -7,7 +7,9 @@ def sha256(msg):
 
 
 def ripemd160(msg):
-    return hashlib.new("ripemd160").update(msg.encode('utf-8')).hexdigest()
+    h = hashlib.new("ripemd160")
+    h.update(msg.encode('utf-8'))
+    return h.hexdigest()
 
 
 class Ecc:
@@ -23,9 +25,7 @@ class Ecc:
         return keys.get_public_key(priv_key, curve.P256)
 
     def sign(self, msg):
-        msg = sha256(msg)
-        return ecdsa.sign(msg, self.priv_key)
+        return ecdsa.sign(sha256(msg), self.priv_key)
 
     def verity(self, signature, msg):
-        msg = sha256(msg)
-        return ecdsa.verify(signature, msg, self.pub_key)
+        return ecdsa.verify(signature, sha256(msg), self.pub_key)
