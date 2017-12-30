@@ -1,6 +1,6 @@
-from .crypto import sha256
-
 import json
+
+from .crypto import sha256
 
 
 class Tx:
@@ -23,3 +23,7 @@ class CoinBaseTx(Tx):
 
     def toString(self):
         return json.dumps(self.outputs)
+
+
+def isCoinBaseTx(tx):
+    return tx is CoinBaseTx

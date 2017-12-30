@@ -1,5 +1,7 @@
-from .crypto import sha256
 import json
+
+from .crypto import sha256
+
 
 def block_merkle_root(txs):
     def merkle_root(hashes):

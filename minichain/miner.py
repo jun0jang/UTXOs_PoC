@@ -1,23 +1,23 @@
-from .tx import CoinBaseTx
-from .block import BlockHeader
 from datetime import datetime
-from .merkle import block_merkle_root
 
+from .block import Block, BlockHeader
+from .merkle import block_merkle_root
+from .tx import CoinBaseTx
 
 all_zero = "0000000000000000000000000000000000000000000000000000000000000000"
 
 BLOCK_REWARD = 50
 
 
-def createNewBlock(txOutScript, first_txs=list(), prevHash=all_zero):
+def createNewBlock(scriptPubKey, normal_txs=list(), prevHash=all_zero):
     reward = CoinBaseTx([
         {
             'value': BLOCK_REWARD,
-            txOutScript: txOutScript
+            'scriptPubKey': scriptPubKey
         }
     ])
     txs = [reward]
-    txs.extend(first_txs)
+    txs.extend(normal_txs)
 
     block_header = BlockHeader(
         prev_hash=prevHash,
@@ -30,4 +30,4 @@ def createNewBlock(txOutScript, first_txs=list(), prevHash=all_zero):
         block_header.nounce += 1
 
     print("Mined block %s" % (block_header.hash))
-    return block_header, txs
+    return Block(block_header, txs)

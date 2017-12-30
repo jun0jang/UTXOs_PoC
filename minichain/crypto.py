@@ -1,5 +1,6 @@
-from fastecdsa import keys, curve, ecdsa
 import hashlib
+
+from fastecdsa import curve, ecdsa, keys
 
 
 def sha256(msg):

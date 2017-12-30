@@ -1,5 +1,9 @@
 import json
+from collections import namedtuple
+
 from .crypto import sha256
+
+Block = namedtuple("Block", ["header", "payload"])
 
 
 class BlockHeader:
