@@ -146,5 +146,7 @@ Scripts/
 # Shared
 pyvenv.cfg
 
+.vscode/
+
 
 # End of https://www.gitignore.io/api/venv,macos,python

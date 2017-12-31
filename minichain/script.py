@@ -24,9 +24,12 @@ def opVerify():
 def opChecksig():
     return {"opcode": "checksig"}
 
-
+# lock script
 def pay_to_public_key_hash(recipient_public_key):
     recipient_public_key_hash = ripemd160(sha256(recipient_public_key))
-    return [opDup(), opHash160(), opPush(recipient_public_key_hash), opEq(), opVerify(), opChecksig()]
-
-
+    return [opDup(),
+            opHash160(),
+            opPush(recipient_public_key_hash),
+            opEq(),
+            opVerify(),
+            opChecksig()]
