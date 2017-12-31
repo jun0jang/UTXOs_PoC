@@ -13,7 +13,7 @@ BLOCK_REWARD = 50
 def createNewBlock(scriptPubKey, normal_txs=list(), prevHash=all_zero):
     reward = CoinBaseTx([
         TxOutput(satoshis=BLOCK_REWARD,
-                 scriptPubKey=scriptPubKey)
+                 script_pub_key=scriptPubKey)
     ])
     txs = [reward]
     txs.extend(normal_txs)

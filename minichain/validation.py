@@ -11,7 +11,6 @@ def connectBlock(block: Block):
         return False
 
     for tx in block.txs:
-        print(tx)
         if not verify_tx(tx):
             return False
 

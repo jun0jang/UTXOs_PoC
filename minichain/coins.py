@@ -1,15 +1,15 @@
 from .tx import isCoinBaseTx
+from .types import OutPoint, TxOutput
 
 
 class Coin:
-    def __init__(self, output, coin_base):
-        self.value = output.satoshis
-        self.scriptPubKey = output.scriptPubKey
+    def __init__(self, output: TxOutput, coin_base: bool):
+        self.output = output
         self.coin_base = coin_base
 
     def __repr__(self):
         return "coinbase: %s, satoshis: %s" % (self.coin_base,
-                                               self.value)
+                                               self.output.satoshis)
 
 
 class CoinsView:
@@ -40,3 +40,6 @@ class CoinsView:
 
     def flush(self):
         self.map.update(self.temporary_map)
+
+    def getCoin(self, outpoint: OutPoint) -> Coin:
+        return self.map[self.out_point(*outpoint)]
