@@ -5,16 +5,27 @@ from .tx import isCoinBaseTx
 
 
 def connectBlock(block: Block):
-    coin_view = CoinsView()
+    coin_view = CoinsView(temporary=True)
 
-    if (not checkBlock(block)):
+    if (not check_block(block)):
         return False
 
+    for tx in block.txs:
+        print(tx)
+        if not verify_tx(tx):
+            return False
 
-def checkBlock(block: Block):
+        coin_view.update_coin(tx)
+
+    # if one of txs is not verify, CoinsView is not synchronization
+    coin_view.flush()
+    return True
+
+
+def check_block(block: Block):
 
     # verify merkle hash
-    if block_merkle_root(block.txs) != block.header["merkle_root"]:
+    if block_merkle_root(block.txs) != block.header.merkle_root:
         return False
 
     # block's first tx must be coinbase tx
@@ -25,3 +36,11 @@ def checkBlock(block: Block):
     for tx in block.txs[1:]:
         if isCoinBaseTx(tx):
             return False
+
+    return True
+
+
+def verify_tx(tx):
+
+    if isCoinBaseTx(tx):
+        return True

@@ -26,4 +26,4 @@ class CoinBaseTx(Tx):
 
 
 def isCoinBaseTx(tx):
-    return tx is CoinBaseTx
+    return isinstance(tx, CoinBaseTx)
