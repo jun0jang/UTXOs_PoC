@@ -8,7 +8,7 @@ from .types import (OpChecking, OpDup, OpEq, OpHash160, OpPush, OpVerify,
 
 
 # lock script(P2PKH)
-def pay_to_public_key_hash(recipient_public_key) -> Script:
+def pay_to_public_key_hash(recipient_public_key: str) -> Script:
     recipient_public_key_hash = ripemd160(sha256(recipient_public_key))
     return [OpDup(),
             OpHash160(),
@@ -19,11 +19,44 @@ def pay_to_public_key_hash(recipient_public_key) -> Script:
 
 
 # un-lock script
-def script_sig(ss: ScriptSig):
+def script_sig(ss: ScriptSig) -> Script:
     return [OpPush(ss.signature), OpPush(ss.pub_key)]
 
 
-def interpret(script, tx: Tx):
+class Env:
+    tx_valid = True
+
+    def __init__(self, stack: List[str]):
+        self.stack = stack
+
+    def invalidate(self):
+        self.tx_valid = False
+
+    @property
+    def is_tx_valid(self):
+        if len(self.stack) != 1:
+            return False
+        return self.tx_valid and self.top == "True"
+
+    @property
+    def top(self):
+        return self.stack[-1]
+
+    def push(self, literal: str):
+        self.stack.append(literal)
+
+    def replace(self, item: str):
+        self.stack[-1] = item
+
+    def replace2(self, item: str):
+        self.stack.pop()
+        self.stack[-1] = item
+
+    def __repr__(self):
+        return "%s" % (self.stack)
+
+
+def interpret(script: Script, tx: Tx) -> Env:
     env = Env([])
     for op in script:
         if op.opcode == "push":
@@ -51,36 +84,3 @@ def interpret(script, tx: Tx):
             else:
                 env.stack.pop()
     return env
-
-
-class Env:
-    tx_valid = True
-
-    def __init__(self, stack: List[str]):
-        self.stack = stack
-
-    def invalidate(self):
-        self.tx_valid = False
-
-    @property
-    def is_tx_valid(self):
-        if len(self.stack) != 1:
-            return False
-        return self.tx_valid and self.top == "True"
-
-    @property
-    def top(self):
-        return self.stack[-1]
-
-    def push(self, literal):
-        self.stack.append(literal)
-
-    def replace(self, item: str):
-        self.stack[-1] = item
-
-    def replace2(self, item: str):
-        self.stack.pop()
-        self.stack[-1] = item
-
-    def __repr__(self):
-        return "%s" % (self.stack)

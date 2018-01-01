@@ -3,8 +3,8 @@ import json
 from .crypto import sha256
 
 
-def block_merkle_root(txs):
-    def merkle_root(hashes):
+def block_merkle_root(txs) -> str:
+    def merkle_root(hashes) -> str:
         hashes_len = len(hashes)
 
         if hashes_len == 1:

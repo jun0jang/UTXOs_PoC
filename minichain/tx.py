@@ -20,7 +20,7 @@ class Tx:
     def hash(self):
         return sha256(sha256(self.serialize()))
 
-    def sig(self, priv_key):
+    def sig(self, priv_key: int):
         return Ecc.sign(self.withEmptyInputsScriptSig().hash, priv_key)
 
     def withEmptyInputsScriptSig(self):
@@ -55,5 +55,5 @@ class NormalTx(Tx):
         return NormalTx(new_inputs, self.outputs)
 
 
-def isCoinBaseTx(tx):
+def isCoinBaseTx(tx: Tx):
     return isinstance(tx, CoinBaseTx)

@@ -3,17 +3,17 @@ from datetime import datetime
 from .block import Block, BlockHeader
 from .merkle import block_merkle_root
 from .tx import CoinBaseTx
-from .types import TxOutput
+from .types import Script, TxOutput
 
 all_zero = "0" * 256
 
 BLOCK_REWARD = 50
 
 
-def createNewBlock(scriptPubKey, normal_txs=list(), prevHash=all_zero):
+def createNewBlock(script_pub_key: Script, normal_txs: list=list(), prevHash: str=all_zero):
     reward = CoinBaseTx([
         TxOutput(satoshis=BLOCK_REWARD,
-                 script_pub_key=scriptPubKey)
+                 script_pub_key=script_pub_key)
     ])
     txs = [reward]
     txs.extend(normal_txs)

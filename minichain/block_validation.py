@@ -5,7 +5,7 @@ from .merkle import block_merkle_root
 from .tx import isCoinBaseTx
 
 
-def verify_block(block: Block):
+def verify_block(block: Block) -> bool:
 
     # verify merkle hash
     if block_merkle_root(block.txs) != block.header.merkle_root:

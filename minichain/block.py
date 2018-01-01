@@ -19,7 +19,7 @@ class BlockHeader:
         return sha256(json.dumps(self.represent_dict))
 
     @property
-    def represent_dict(self):
+    def represent_dict(self) -> dict:
         return {
             "prev_hash": self.prev_hash,
             "merkle_root": self.merkle_root,
@@ -28,5 +28,5 @@ class BlockHeader:
         }
 
     @property
-    def is_valid(self):
+    def is_valid(self) -> bool:
         return self.hash.startswith("0000")

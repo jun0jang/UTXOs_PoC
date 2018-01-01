@@ -1,8 +1,8 @@
+from .blockchain import connectBlock
 from .crypto import Ecc
 from .miner import createNewBlock
 from .script import pay_to_public_key_hash
 from .tx import NormalTx
-from .blockchain import connectBlock
 from .types import EMPTY_SCRIPT_SIG, OutPoint, ScriptSig, TxInput, TxOutput
 
 

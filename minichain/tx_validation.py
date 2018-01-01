@@ -3,7 +3,7 @@ from .script import interpret, script_sig
 from .tx import NormalTx, isCoinBaseTx
 
 
-def verify_tx(tx):
+def verify_tx(tx) -> bool:
     coins_view = CoinsView()
 
     if isCoinBaseTx(tx):
@@ -26,7 +26,7 @@ def verify_tx(tx):
     return True
 
 
-def check_inputs(tx: NormalTx):
+def check_inputs(tx: NormalTx) -> bool:
     coins_view = CoinsView()
 
     # it return false if inputs's outpoint is spend or not found

@@ -4,7 +4,7 @@ from .coins import CoinsView
 from .tx_validation import verify_tx
 
 
-def connectBlock(block: Block):
+def connectBlock(block: Block) -> bool:
     coin_view = CoinsView(temporary=True)
 
     if (not verify_block(block)):

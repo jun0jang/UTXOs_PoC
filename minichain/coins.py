@@ -47,13 +47,13 @@ class CoinsView:
     def get_coin(self, outpoint: OutPoint) -> Coin:
         return self.map[outpoint_hash(*outpoint)]
 
-    def hasInputs(self, inputs: List[TxInput]):
+    def hasInputs(self, inputs: List[TxInput]) -> bool:
         for input in inputs:
             if not self.hasCoin(input.outpoint):
                 return False
         return True
 
-    def hasCoin(self, outpoint: OutPoint):
+    def hasCoin(self, outpoint: OutPoint) -> bool:
         key = outpoint_hash(*outpoint)
         coin = self.temporary_map.get(key, None)
         if coin or not coin.is_spent:
