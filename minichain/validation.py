@@ -1,7 +1,8 @@
 from .block import Block
-from .coins import CoinsView
+from .coins import CoinsView, outpoint_hash
+from .helps import check_list_item_duplication
 from .merkle import block_merkle_root
-from .tx import isCoinBaseTx
+from .tx import NormalTx, isCoinBaseTx
 
 
 def connectBlock(block: Block):
@@ -43,3 +44,35 @@ def verify_tx(tx):
 
     if isCoinBaseTx(tx):
         return True
+
+    if not check_inputs(tx):
+        return False
+
+
+def check_inputs(tx: NormalTx):
+    coins_view = CoinsView()
+
+    # it return false if inputs's outpoint is spend or not found
+    if not coins_view.hasInputs(tx.inputs):
+        return False
+
+    # inputs duplication check
+    outpoint_hashs = [outpoint_hash(*input.outpoint) for input in tx.inputs]
+    if check_list_item_duplication(outpoint_hashs):
+        return False
+
+    # input's value must be greater then output's value
+    value_in = 0
+    for input in tx.inputs:
+        prev_outpoint = input.outpoint
+        coin = coins_view.get_coin(prev_outpoint)
+        value_in += coin.output.satoshis
+
+    value_out = 0
+    for output in tx.outputs:
+        value_out = output.satoshis
+
+    if value_in < value_out:
+        return False
+
+    return True

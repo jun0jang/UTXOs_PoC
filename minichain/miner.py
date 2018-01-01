@@ -5,7 +5,7 @@ from .merkle import block_merkle_root
 from .tx import CoinBaseTx
 from .types import TxOutput
 
-all_zero = "0000000000000000000000000000000000000000000000000000000000000000"
+all_zero = "0" * 256
 
 BLOCK_REWARD = 50
 
