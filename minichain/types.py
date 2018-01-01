@@ -43,7 +43,7 @@ class ScriptSig(NamedTuple):
 
 class TxOutput(NamedTuple):
     satoshis: int
-    script_pub_key: str
+    script_pub_key: Script
 
 
 class TxInput(NamedTuple):
