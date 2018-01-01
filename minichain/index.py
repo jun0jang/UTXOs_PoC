@@ -2,8 +2,8 @@ from .crypto import Ecc
 from .miner import createNewBlock
 from .script import pay_to_public_key_hash
 from .tx import NormalTx
+from .blockchain import connectBlock
 from .types import EMPTY_SCRIPT_SIG, OutPoint, ScriptSig, TxInput, TxOutput
-from .validation import connectBlock
 
 
 def sendTx(sending_ecc: Ecc, to_pub_key: str, value: int, outpoint: OutPoint) -> NormalTx:

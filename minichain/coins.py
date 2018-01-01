@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import List
 
 from .tx import isCoinBaseTx
@@ -30,7 +31,7 @@ class CoinsView:
     def __init__(self, temporary=False):
         # map <key, Coin> key: outpoint(Tx hash + index)
         if temporary is not None:
-            self.temporary_map = self.map
+            self.temporary_map = deepcopy(self.map)
 
     def update_coin(self, tx):
         coin_base = isCoinBaseTx(tx)
