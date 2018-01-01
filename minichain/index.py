@@ -38,3 +38,4 @@ def main():
 
     script2 = pay_to_public_key_hash(person2.pub_key)
     block1 = createNewBlock(script2, [tx1, tx2, tx3], genesisBlock.header.hash)
+    print(connectBlock(block1))

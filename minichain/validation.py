@@ -2,6 +2,7 @@ from .block import Block
 from .coins import CoinsView, outpoint_hash
 from .helps import check_list_item_duplication
 from .merkle import block_merkle_root
+from .script import interpret, script_sig
 from .tx import NormalTx, isCoinBaseTx
 
 
@@ -33,14 +34,23 @@ def check_block(block: Block):
         return False
 
     # rest tx must be normal tx
+
+    outpoint_hashs = []
     for tx in block.txs[1:]:
         if isCoinBaseTx(tx):
             return False
+
+        outpoint_hashs + [outpoint_hash(*input.outpoint) for input in tx.inputs]
+
+    # inputs duplication check
+    if not check_list_item_duplication(outpoint_hashs):
+        return False
 
     return True
 
 
 def verify_tx(tx):
+    coins_view = CoinsView()
 
     if isCoinBaseTx(tx):
         return True
@@ -48,17 +58,23 @@ def verify_tx(tx):
     if not check_inputs(tx):
         return False
 
+    # UTXOs unlock and lock
+    for input in tx.inputs:
+        coin = coins_view.get_coin(input.outpoint)
+        p2pkh_script = script_sig(input.script_sig) + coin.output.script_pub_key
+        env = interpret(p2pkh_script, tx)
+
+        if not env.is_tx_valid:
+            return False
+
+    return True
+
 
 def check_inputs(tx: NormalTx):
     coins_view = CoinsView()
 
     # it return false if inputs's outpoint is spend or not found
     if not coins_view.hasInputs(tx.inputs):
-        return False
-
-    # inputs duplication check
-    outpoint_hashs = [outpoint_hash(*input.outpoint) for input in tx.inputs]
-    if check_list_item_duplication(outpoint_hashs):
         return False
 
     # input's value must be greater then output's value

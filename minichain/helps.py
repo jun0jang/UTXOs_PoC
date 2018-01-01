@@ -9,5 +9,9 @@ def strToPoint(pub_key: str):
 
 
 def check_list_item_duplication(target: list):
+    # list is empty if block only contain coinbase tx
+    if not target:
+        return True
+
     counting = Counter(target).values()
     return not max(counting) > 1
